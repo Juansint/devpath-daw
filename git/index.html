@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Git y GitHub — DevPath</title>
+<meta name="description" content="El libro Pro Git convertido en una ruta interactiva: capítulos resumidos, simulador de ramas, chuleta de comandos y retos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="/"><span class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.3 7.2c4 1 7.4 2.2 7.4 4.8"/></svg></span><b>DevPath</b><span class="chip">Git · Pro Git</span></a>
+<nav class="main" aria-label="Principal"><a href="/">Todos los temas</a><a href="#capitulos">Capítulos</a><a href="#ruta">Ruta</a><a href="#simulador">Simulador</a><a href="#chuleta">Chuleta</a><a href="#retos">Retos</a></nav>
+<a class="btn primary" href="/git/leccion">Empezar a leer</a>
+</div></header>
+
+<main>
+<section id="inicio" class="wrap hero">
+<div>
+<span class="pill p-indigo">Apuntes interactivos · DAW</span>
+<h1>Git y GitHub<br><span>paso a paso</span></h1>
+<p class="lead">Resumen del libro Pro Git por capítulos, con un simulador de ramas y retos de repaso.</p>
+<div class="row"><a class="btn primary" href="#capitulos">Ver los 10 capítulos</a><a class="btn ghost" href="#simulador">▶ Probar el simulador</a></div>
+</div>
+<div class="term mono" aria-label="Ejemplo de terminal">
+<div class="bar"><i style="background:#F87171"></i><i style="background:#FBBF24"></i><i style="background:#34D399"></i><small>~/proyecto-clase</small></div>
+<div class="body" id="typer"></div>
+</div>
+</section>
+
+<section id="capitulos" class="wrap">
+<div class="sec-head"><div><h2>Los 10 capítulos del libro</h2><p>Cada tarjeta resume un capítulo de Pro Git. Filtra por nivel y entra al que necesites.</p></div>
+<div class="seg" role="group" aria-label="Filtrar por nivel" id="levels"></div></div>
+<div class="grid" id="chapters"></div>
+</section>
+
+<section class="wrap">
+<div class="stats"><div class="pop" style="font-weight:600;font-size:18px">Sobre el libro</div>
+<div class="row" style="gap:40px"><div><div class="n">10</div><small>capítulos</small></div><div><div class="n">2.ª ed.</div><small>Chacon y Straub</small></div><div><div class="n">CC</div><small>BY-NC-SA 3.0</small></div></div></div>
+</section>
+
+<section id="ruta" class="wrap">
+<div class="sec-head"><div><h2>Tu ruta de aprendizaje</h2><p>De cero a colaborar en GitHub en 5 etapas. Pulsa una etapa para ver qué dominarás.</p></div></div>
+<div class="card" style="padding:28px"><div class="road" id="road"></div><div class="stage" id="stage"></div></div>
+</section>
+
+<section id="simulador" class="wrap">
+<div class="sec-head"><div><span class="pill p-amber">Interactivo</span><h2>Simulador de ramas</h2><p>Pulsa los botones y mira cómo cambia el historial. Así se ven por dentro los capítulos 2 y 3.</p></div>
+<button class="btn ghost" id="reset">Reiniciar</button></div>
+<div class="sim">
+<div class="card board">
+<div class="row actions">
+<button class="btn b-commit" data-act="commit">git commit</button>
+<button class="btn b-branch" data-act="branch">git branch</button>
+<button class="btn b-switch" data-act="switch">git switch</button>
+<button class="btn b-merge" data-act="merge">git merge</button>
+<span class="where">Estás en: <b class="mono" id="current">main</b></span>
+</div>
+<div class="canvas"><div class="inner" id="graph"></div></div>
+<div class="explain" aria-live="polite"><span aria-hidden="true">ℹ️</span><div id="explain"></div></div>
+</div>
+<div class="log mono"><small>terminal · historial de comandos</small><div class="lines" id="log"></div></div>
+</div>
+</section>
+
+<section id="chuleta" class="wrap">
+<div class="sec-head"><div><h2>Chuleta de comandos</h2><p>Los comandos que más usarás en clase. Toca uno para copiarlo.</p></div>
+<div class="search"><label for="buscar">Buscar comando</label><input id="buscar" type="search" placeholder="Ej.: push, rama, deshacer…"></div></div>
+<div class="grid" id="cmds" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+<p id="noresults" hidden style="color:var(--muted)">No hay comandos con ese nombre. Prueba con otra palabra.</p>
+</section>
+
+<section id="retos" class="wrap">
+<div class="quiz">
+<div class="side"><h2 style="margin:0;font-size:30px;font-weight:600">Retos rápidos</h2>
+<p style="margin:0;color:var(--muted);line-height:1.6">Comprueba si lo has pillado. Ideal para repasar antes del examen o para jugar en clase.</p>
+<div class="card" style="display:flex;flex-direction:column;gap:8px"><div class="row" style="justify-content:space-between;font-size:13px;color:var(--muted)"><span>Progreso</span><span id="qpos"></span></div><div class="prog"><i id="qbar"></i></div><div style="font-size:13px;color:var(--muted)">Aciertos: <b id="score" style="color:var(--ink)">0</b></div></div>
+</div>
+<div class="card main" style="padding:24px"><div id="qmeta" style="font-size:13px;color:#4338CA;font-weight:600"></div><div id="qtext" class="pop" style="font-weight:600;font-size:20px;line-height:1.4"></div><div id="opts" style="display:flex;flex-direction:column;gap:10px"></div><div id="fb"></div></div>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>Proyecto educativo no oficial. Contenido resumido de <a href="https://git-scm.com/book/es/v2">Pro Git</a> (Scott Chacon y Ben Straub), licencia CC BY-NC-SA 3.0.</span><a href="/">Volver a DevPath</a></div></footer>
+<script src="/git/app.js"></script>
+</body>
+</html>

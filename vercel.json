@@ -1,0 +1,10 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/tema/:slug", "destination": "/tema" }
+  ],
+  "redirects": [
+    { "source": "/gitpath", "destination": "/git", "permanent": false }
+  ]
+}

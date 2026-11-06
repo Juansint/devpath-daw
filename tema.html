@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tema — DevPath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="top"><div class="wrap" style="padding-top:8px;padding-bottom:8px">
+<a href="/" class="btn" style="color:#374151;padding-left:0">← DevPath</a>
+<nav class="tabs" aria-label="Temas" id="tabs"></nav>
+</div></header>
+
+<main>
+<section class="wrap" style="padding-top:36px;padding-bottom:32px">
+<div class="card thero">
+<div class="id"><span class="badge72" id="badge"></span>
+<div><span class="pill" id="area"></span><h1 id="name"></h1><p id="desc"></p></div></div>
+<div class="side">
+<div class="row" style="justify-content:space-between;font-size:13px;color:var(--muted)"><span>Ruta del tema</span><span id="scount"></span></div>
+<div class="prog"><i id="sbar" style="background:var(--green)"></i></div>
+<a class="btn primary" id="ext" target="_blank" rel="noopener" style="justify-content:center"></a>
+</div>
+</div>
+</section>
+
+<section class="wrap" style="padding-bottom:40px">
+<h2 class="sub">Ruta en 4 pasos</h2>
+<div class="steps" id="steps"></div>
+</section>
+
+<section class="wrap" style="padding-bottom:40px">
+<span class="pill p-amber">Práctica interactiva</span>
+<h2 class="sub" id="ptitle" style="margin-top:10px"></h2>
+<div id="practice"></div>
+</section>
+
+<section class="wrap" style="padding-bottom:40px">
+<div class="sec-head"><h2 class="sub" style="margin:0" id="ctitle"></h2>
+<div class="search"><label for="buscar-chuleta">Buscar en la chuleta</label><input id="buscar-chuleta" type="search" placeholder="Escribe una palabra…"></div></div>
+<div class="grid" id="cheats" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px"></div>
+</section>
+
+<section class="wrap" style="padding-bottom:56px">
+<div class="card" style="padding:24px;display:flex;flex-direction:column;gap:14px;max-width:760px">
+<div class="row" style="justify-content:space-between;font-size:13px"><span id="qmeta" style="color:#4338CA;font-weight:600"></span><span style="color:var(--muted)">Aciertos: <b id="score">0</b></span></div>
+<div id="qtext" class="pop" style="font-weight:600;font-size:20px;line-height:1.4"></div>
+<div id="opts" style="display:flex;flex-direction:column;gap:10px"></div>
+<div id="fb"></div>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>DevPath · Proyecto educativo de la clase de DAW</span><a href="/">Volver a todos los temas</a></div></footer>
+<script src="/data.js"></script>
+<script src="/tema.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DevPath — Temas de DAW para repasar y practicar</title>
+<meta name="description" content="Apuntes interactivos de DAW: HTML, CSS, JavaScript, React, Java, PHP, SQL y Git, con chuletas, prácticas y retos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="/"><span class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg></span><b>DevPath</b><span class="chip">DAW</span></a>
+<nav class="main" aria-label="Principal"><a href="#temas">Temas</a><a href="#ruta">Ruta DAW</a><a href="#recursos">Recursos</a></nav>
+<a class="btn primary" href="/tema/html">Empezar por HTML</a>
+</div></header>
+
+<main>
+<section class="wrap hub-hero">
+<div>
+<span class="pill p-indigo">Apuntes interactivos · DAW</span>
+<h1>Temas de DAW<br><span>para repasar y practicar</span></h1>
+<p class="lead">Cada tema tiene una ruta de estudio, una chuleta con buscador, una práctica, retos de repaso y un recurso externo para ampliar.</p>
+<div class="search" style="max-width:460px;flex:none"><label for="buscar-tema">¿Qué quieres repasar hoy?</label><input id="buscar-tema" type="search" placeholder="Busca: html, bases de datos, ramas…"></div>
+</div>
+<div class="codecard mono" aria-hidden="true">
+<div><span style="color:#8B93FF">&lt;h1&gt;</span>Hola, DAW<span style="color:#8B93FF">&lt;/h1&gt;</span></div>
+<div><span style="color:#6EE7B7">SELECT</span> * <span style="color:#6EE7B7">FROM</span> alumnos;</div>
+<div><span style="color:#FBBF24">git</span> commit -m "primer paso"</div>
+<div><span style="color:#F9A8D4">const</span> nota = <span style="color:#FBBF24">10</span>;</div>
+</div>
+</section>
+
+<section id="temas" class="wrap">
+<div class="sec-head"><div><h2>Elige un tema</h2><p>Cada tarjeta abre su sección interactiva.</p></div>
+<div class="seg" role="group" aria-label="Filtrar por área" id="areas"></div></div>
+<div class="grid" id="topics" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))"></div>
+<p id="notopics" hidden style="color:var(--muted)">Ningún tema coincide. Prueba con otra palabra.</p>
+<div class="soon"><b style="font-size:14px;margin-right:6px">Próximamente:</b><span>Python</span><span>C</span><span>C++</span><span>Ciberseguridad</span><span>AWS</span><span>IA / ML</span></div>
+</section>
+
+<section id="ruta" class="wrap">
+<div class="sec-head"><div><h2>Ruta DAW recomendada</h2><p>Un orden lógico para no perderte. Marca los temas que ya dominas (se guarda en tu navegador).</p></div></div>
+<div class="card" style="padding:24px;display:flex;flex-direction:column;gap:16px">
+<div class="row" style="justify-content:space-between;font-size:13px;color:var(--muted)"><span>Tu progreso</span><span id="pcount"></span></div>
+<div class="prog"><i id="pbar" style="background:var(--green)"></i></div>
+<div class="path" id="path"></div>
+</div>
+</section>
+
+<section id="recursos" class="wrap">
+<div class="sec-head"><div><h2>Recursos para ampliar</h2><p>Webs externas para cada tema. Se abren en una pestaña nueva.</p></div></div>
+<div class="res" id="res"></div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>Proyecto educativo de la clase de DAW. Los recursos enlazados pertenecen a sus autores.</span><span>La sección de Git resume <a href="https://git-scm.com/book/es/v2">Pro Git</a> (CC BY-NC-SA 3.0)</span></div></footer>
+<script src="/data.js"></script>
+<script src="/hub.js"></script>
+</body>
+</html>
