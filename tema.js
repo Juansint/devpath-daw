@@ -135,6 +135,7 @@ renderCheats();
 /* Retos */
 let qi = 0, picked = null, score = 0;
 function renderQuiz() {
+  if (!t.quiz.length) { $('#qmeta').textContent = 'Cargando retos…'; return; }
   const q = t.quiz[qi], ans = picked !== null, last = qi === t.quiz.length - 1;
   $('#qmeta').textContent = 'Reto ' + (qi + 1) + ' de ' + t.quiz.length + ' · ' + t.name; $('#score').textContent = score;
   $('#qtext').textContent = q.t;
