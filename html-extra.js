@@ -1,0 +1,111 @@
+/* Ampliación de HTML: chuleta explicada [código, explicación, ejemplo, grupo] y más retos */
+const HTML_CHEATS = [
+  ['<!DOCTYPE html>', 'Primera línea de todo documento. Activa el modo estándar de HTML5; sin ella el navegador imita fallos antiguos.', '<!DOCTYPE html>\n<html lang="es">', 'Estructura del documento'],
+  ['<html lang="es">', 'Elemento raíz que envuelve toda la página. lang indica el idioma para lectores de pantalla, traductores y buscadores.', '<html lang="es">…</html>', 'Estructura del documento'],
+  ['<head>', 'Metadatos que no se ven: título, codificación, CSS y scripts.', '<head>\n  <title>Mi web</title>\n</head>', 'Estructura del documento'],
+  ['<body>', 'Todo el contenido visible de la página.', '<body>\n  <h1>Hola</h1>\n</body>', 'Estructura del documento'],
+  ['<meta charset="utf-8">', 'Codificación de caracteres. Sin ella, tildes, ñ y emojis pueden verse como símbolos raros. Va la primera en el head.', '<meta charset="utf-8">', 'Estructura del documento'],
+  ['<meta name="viewport">', 'Hace que la página se adapte al ancho del móvil. Imprescindible para el diseño responsive.', '<meta name="viewport" content="width=device-width, initial-scale=1">', 'Estructura del documento'],
+  ['<title>', 'Texto de la pestaña y título del resultado en Google. Único por página, unos 50-60 caracteres.', '<title>Entradas — Festival DAW</title>', 'Estructura del documento'],
+  ['<link rel="stylesheet">', 'Enlaza un archivo CSS externo. Va en el head.', '<link rel="stylesheet" href="css/styles.css">', 'Estructura del documento'],
+  ['<script src defer>', 'Carga un archivo JavaScript. Con defer no bloquea la carga y se ejecuta cuando el HTML está listo.', '<script src="js/app.js" defer></script>', 'Estructura del documento'],
+  ['<!-- comentario -->', 'Nota que el navegador ignora. Visible en el código fuente: nunca pongas datos privados.', '<!-- Inicio del menú -->', 'Estructura del documento'],
+
+  ['<h1> … <h6>', 'Títulos del nivel 1 al 6. Forman el índice de la página: un h1 por página y sin saltar niveles. El tamaño se cambia con CSS.', '<h1>Festival</h1>\n<h2>Cartel</h2>', 'Texto'],
+  ['<p>', 'Párrafo de texto. El navegador añade un margen arriba y abajo.', '<p>Tres días de música.</p>', 'Texto'],
+  ['<br>', 'Salto de línea dentro de un párrafo (direcciones, poemas). No lo uses para separar bloques: para eso está el margin de CSS.', 'Calle Mayor, 1<br>Madrid', 'Texto'],
+  ['<hr>', 'Cambio de tema entre bloques; se dibuja como una línea horizontal.', '<p>Fin del cartel.</p>\n<hr>', 'Texto'],
+  ['<strong> / <em>', 'strong marca algo importante y em pone énfasis. Se ven en negrita y cursiva, y los lectores de pantalla los entonan.', '<strong>Atención:</strong> aforo <em>limitado</em>', 'Texto'],
+  ['<b> / <i>', 'Negrita y cursiva sin significado extra: términos técnicos, títulos de obras o palabras en otro idioma.', 'Usamos el editor <i>Visual Studio Code</i>.', 'Texto'],
+  ['<mark> / <small>', 'mark resalta como un rotulador; small es letra pequeña para avisos legales o copyright.', '<small>© 2026</small>', 'Texto'],
+  ['<del> / <ins>', 'Texto eliminado y añadido. Ideal para precios rebajados.', '<del>45 €</del> <ins>35 €</ins>', 'Texto'],
+  ['<sub> / <sup>', 'Subíndice y superíndice.', 'H<sub>2</sub>O · 300 m<sup>2</sup>', 'Texto'],
+  ['<abbr title="">', 'Abreviatura. title muestra el significado completo al pasar el ratón.', '<abbr title="Desarrollo de Aplicaciones Web">DAW</abbr>', 'Texto'],
+  ['<blockquote> / <q>', 'Cita larga en bloque / cita corta en línea (añade comillas solas).', '<q>commit pronto, commit a menudo</q>', 'Texto'],
+  ['<pre><code>', 'Bloque de código: pre respeta espacios y saltos de línea; code lo marca como código.', '<pre><code>git status</code></pre>', 'Texto'],
+  ['&lt; &gt; &amp; &nbsp;', 'Entidades para mostrar <, >, & y un espacio que no se parte. Necesarias para enseñar código HTML como texto.', '35&nbsp;&euro; · &lt;p&gt;', 'Texto'],
+
+  ['<ul> <li>', 'Lista sin orden (viñetas). Cada elemento va en un li. Base de los menús de navegación.', '<ul>\n  <li>DNI</li>\n  <li>Entrada</li>\n</ul>', 'Listas'],
+  ['<ol start reversed>', 'Lista numerada. start cambia el número inicial, reversed cuenta hacia atrás y type usa letras (a, A) o romanos (i, I).', '<ol start="3">\n  <li>Tercer paso</li>\n</ol>', 'Listas'],
+  ['<dl> <dt> <dd>', 'Lista de término y descripción: glosarios, FAQ o fichas de datos.', '<dl>\n  <dt>Lugar</dt>\n  <dd>IFEMA</dd>\n</dl>', 'Listas'],
+
+  ['<a href="url">', 'Enlace. href acepta URLs absolutas (https://…), rutas relativas (precios.html, ../index.html), #id, mailto: y tel:.', '<a href="precios.html">Ver precios</a>', 'Enlaces'],
+  ['target="_blank" rel="noopener"', 'Abre el enlace en una pestaña nueva; rel="noopener" evita que la otra página controle la tuya.', '<a href="https://mdn.dev" target="_blank" rel="noopener">MDN</a>', 'Enlaces'],
+  ['href="#id"', 'Salta a la parte de la página que tiene ese id. Así se hacen índices y botones de «volver arriba».', '<a href="#contacto">Contacto</a>\n<h2 id="contacto">…</h2>', 'Enlaces'],
+  ['mailto: / tel:', 'Abre el correo con la dirección rellenada o llama desde el móvil.', '<a href="mailto:info@web.es">Email</a>\n<a href="tel:+34600123456">Llamar</a>', 'Enlaces'],
+  ['download', 'Descarga el archivo enlazado en lugar de abrirlo. Puede llevar el nombre con el que se guarda.', '<a href="normas.pdf" download>Descargar normas</a>', 'Enlaces'],
+  ['<nav>', 'Bloque de navegación principal. Suele contener una ul de enlaces; aria-current="page" marca la página actual.', '<nav><ul><li><a href="/" aria-current="page">Inicio</a></li></ul></nav>', 'Enlaces'],
+
+  ['<img src alt>', 'Imagen. src es la ruta y alt la descripción (obligatorio). Si es decorativa, alt="".', '<img src="logo.svg" alt="Festival DAW" width="120" height="40">', 'Imágenes y multimedia'],
+  ['width / height', 'Tamaño de la imagen en píxeles (sin unidad). Reserva el hueco y evita que la página salte al cargar.', '<img src="foto.jpg" alt="" width="600" height="400">', 'Imágenes y multimedia'],
+  ['loading="lazy"', 'Carga la imagen o el iframe solo cuando se acerca a la pantalla. No lo uses en la imagen principal de arriba.', '<img src="galeria.webp" alt="Público" loading="lazy">', 'Imágenes y multimedia'],
+  ['<figure> <figcaption>', 'Agrupa una imagen (o un gráfico o código) con su pie de foto visible.', '<figure>\n  <img src="a.jpg" alt="…">\n  <figcaption>Edición 2025</figcaption>\n</figure>', 'Imágenes y multimedia'],
+  ['srcset / sizes', 'Ofrece varias versiones de la imagen; el navegador descarga la más ligera que se vea bien en esa pantalla.', '<img src="f-800.jpg" srcset="f-400.jpg 400w, f-800.jpg 800w" sizes="100vw" alt="…">', 'Imágenes y multimedia'],
+  ['<picture> <source>', 'Formatos modernos (AVIF, WebP) con un img de respaldo, o imágenes distintas según el ancho de pantalla.', '<picture>\n  <source srcset="a.webp" type="image/webp">\n  <img src="a.jpg" alt="…">\n</picture>', 'Imágenes y multimedia'],
+  ['<video controls>', 'Vídeo con controles. poster es la portada, muted autoplay lo reproduce solo, loop lo repite y track añade subtítulos.', '<video src="v.mp4" controls poster="p.jpg"></video>', 'Imágenes y multimedia'],
+  ['<audio controls>', 'Reproductor de audio con controles.', '<audio src="himno.mp3" controls></audio>', 'Imágenes y multimedia'],
+  ['<iframe title>', 'Incrusta otra página (mapa, vídeo). title describe su contenido; loading="lazy" la carga más tarde.', '<iframe src="https://…" title="Mapa de IFEMA" loading="lazy"></iframe>', 'Imágenes y multimedia'],
+  ['<svg viewBox>', 'Gráfico vectorial en el propio HTML. Se escala sin perder calidad y se colorea con CSS (fill).', '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="5"/></svg>', 'Imágenes y multimedia'],
+
+  ['<table> <tr> <td>', 'Tabla de datos: table la envuelve, tr es cada fila y td cada celda. Nunca para maquetar.', '<table>\n  <tr><td>18:00</td><td>Banda A</td></tr>\n</table>', 'Tablas'],
+  ['<th scope>', 'Celda de cabecera. scope="col" o "row" indica si encabeza una columna o una fila (accesibilidad).', '<th scope="col">Precio</th>', 'Tablas'],
+  ['<caption>', 'Título de la tabla. Va justo después de <table>.', '<table>\n  <caption>Precios</caption>', 'Tablas'],
+  ['<thead> <tbody> <tfoot>', 'Agrupan cabecera, datos y pie (totales). Facilitan el estilo y la impresión.', '<thead><tr><th>Tipo</th></tr></thead>', 'Tablas'],
+  ['colspan / rowspan', 'Una celda ocupa varias columnas o varias filas. Quita las celdas que queden tapadas.', '<td colspan="2">Cerrado</td>', 'Tablas'],
+
+  ['<form action method>', 'Agrupa campos que se envían juntos. action es la URL de destino; method get (datos en la URL) o post (ocultos).', '<form action="comprar.php" method="post">', 'Formularios'],
+  ['<label for="id">', 'Nombre de un campo. for coincide con el id del input: al hacer clic en el texto se activa el campo.', '<label for="email">Correo</label>\n<input id="email" name="email">', 'Formularios'],
+  ['<input name>', 'Campo de formulario. name es la clave con la que llega el dato al servidor; sin name no se envía.', '<input name="nombre" type="text">', 'Formularios'],
+  ['type="email|tel|number|date"', 'Cada tipo muestra el teclado adecuado en móvil y valida el formato.', '<input type="email" name="email">', 'Formularios'],
+  ['type="password"', 'Oculta lo que se escribe. Usa autocomplete="new-password" en los registros.', '<input type="password" name="pass">', 'Formularios'],
+  ['type="checkbox" / "radio"', 'checkbox: se marcan varias. radio: solo una por grupo (mismo name). checked la marca por defecto.', '<input type="radio" name="tipo" value="dia" checked>', 'Formularios'],
+  ['<select> <option>', 'Lista desplegable. value es lo que se envía; selected marca la opción por defecto; optgroup agrupa.', '<select name="zona">\n  <option value="vip">VIP</option>\n</select>', 'Formularios'],
+  ['<textarea rows>', 'Texto de varias líneas. El valor inicial va entre las etiquetas.', '<textarea name="msg" rows="4"></textarea>', 'Formularios'],
+  ['<datalist>', 'Sugerencias para un input (enlazado con list="id") sin obligar a elegir una.', '<input list="c"><datalist id="c"><option value="Madrid"></datalist>', 'Formularios'],
+  ['<button type>', 'submit envía, reset vacía y button no hace nada (para JavaScript). Escribe siempre el type.', '<button type="submit">Comprar</button>', 'Formularios'],
+  ['<fieldset> <legend>', 'Agrupa campos relacionados con un título. Imprescindible en grupos de radio.', '<fieldset>\n  <legend>Pago</legend>\n  …\n</fieldset>', 'Formularios'],
+  ['required', 'Campo obligatorio: el navegador no deja enviar si está vacío.', '<input name="email" required>', 'Formularios'],
+  ['minlength / maxlength', 'Longitud mínima y máxima del texto.', '<input name="usuario" minlength="4" maxlength="12">', 'Formularios'],
+  ['min / max / step', 'Límites y saltos para números y fechas.', '<input type="number" min="1" max="6" step="1">', 'Formularios'],
+  ['pattern', 'Expresión regular que debe cumplir el valor; title explica el formato si falla.', '<input pattern="[0-9]{5}" title="5 cifras">', 'Formularios'],
+  ['disabled / readonly', 'disabled: no se edita ni se envía. readonly: no se edita pero sí se envía.', '<input value="A-1024" readonly>', 'Formularios'],
+  ['autocomplete', 'Indica qué dato espera el campo (name, email, tel…) para que el navegador lo rellene.', '<input name="email" autocomplete="email">', 'Formularios'],
+  ['enctype="multipart/form-data"', 'Obligatorio, junto a method="post", para subir archivos con input type="file".', '<form method="post" enctype="multipart/form-data">', 'Formularios'],
+
+  ['<header> <footer>', 'Cabecera y pie de la página o de una sección.', '<header><h1>Festival</h1></header>', 'Semántica'],
+  ['<main>', 'Contenido principal de la página. Solo uno.', '<main>\n  <h1>Entradas</h1>\n</main>', 'Semántica'],
+  ['<section>', 'Bloque temático de la página, normalmente con su propio h2.', '<section id="cartel">\n  <h2>Cartel</h2>\n</section>', 'Semántica'],
+  ['<article>', 'Contenido que tiene sentido por sí solo: noticia, post, tarjeta de producto o de artista.', '<article><h3>Banda A</h3></article>', 'Semántica'],
+  ['<aside>', 'Contenido relacionado pero secundario: barra lateral, recuadro informativo.', '<aside>¿Sabías que…?</aside>', 'Semántica'],
+  ['<div> / <span>', 'Contenedores genéricos sin significado: div de bloque, span en línea. Úsalos si no hay una etiqueta semántica mejor.', '<div class="tarjeta">…</div>', 'Semántica'],
+  ['<time datetime>', 'Fecha u hora con su valor legible por máquinas.', '<time datetime="2026-06-12">12 de junio</time>', 'Semántica'],
+  ['<address>', 'Datos de contacto del autor o de la organización.', '<address><a href="mailto:info@web.es">info@web.es</a></address>', 'Semántica'],
+
+  ['id', 'Identificador único en la página. Lo usan las anclas, los labels y JavaScript.', '<section id="precios">', 'Atributos globales'],
+  ['class', 'Una o varias clases (separadas por espacios) para aplicar estilos de CSS.', '<p class="aviso grande">', 'Atributos globales'],
+  ['hidden', 'Oculta el elemento.', '<p hidden>No se ve</p>', 'Atributos globales'],
+  ['title', 'Información extra que aparece al pasar el ratón.', '<span title="Impuestos incluidos">35 €</span>', 'Atributos globales'],
+  ['data-*', 'Datos propios en un elemento. En JS se leen con el.dataset y en CSS con [data-x="…"].', '<li data-precio="39">Viernes</li>', 'Atributos globales'],
+  ['tabindex="0"', 'Hace que un elemento se pueda enfocar con el teclado (Tab).', '<div tabindex="0">…</div>', 'Atributos globales'],
+
+  ['<details> <summary>', 'Desplegable sin JavaScript. open lo muestra abierto; mismo name en varios = acordeón.', '<details>\n  <summary>¿Hay parking?</summary>\n  <p>Sí.</p>\n</details>', 'Interactivos'],
+  ['<dialog>', 'Ventana modal nativa. Se abre con showModal() y se cierra con close() o Escape.', '<dialog id="d"><form method="dialog"><button>Cerrar</button></form></dialog>', 'Interactivos'],
+  ['<progress> / <meter>', 'progress: avance de una tarea. meter: medida en un rango (aforo, nivel).', '<progress value="70" max="100"></progress>', 'Interactivos'],
+  ['popover', 'Capa emergente que se abre con un botón popovertarget, sin JavaScript.', '<button popovertarget="i">Info</button>\n<div id="i" popover>…</div>', 'Interactivos'],
+  ['<template>', 'Molde de HTML que no se pinta hasta que JavaScript lo clona.', '<template id="tarjeta"><article>…</article></template>', 'Interactivos'],
+
+  ['aria-label', 'Nombre accesible para elementos sin texto visible, como un botón con solo un icono.', '<button aria-label="Cerrar">✕</button>', 'Accesibilidad y SEO'],
+  ['aria-hidden="true"', 'Oculta a los lectores de pantalla un elemento decorativo.', '<span aria-hidden="true">★</span>', 'Accesibilidad y SEO'],
+  ['aria-describedby', 'Enlaza un campo con su texto de ayuda o de error.', '<input aria-describedby="ayuda"><p id="ayuda">Mín. 8</p>', 'Accesibilidad y SEO'],
+  ['<meta name="description">', 'Resumen de la página que Google suele mostrar bajo el título (unos 150 caracteres).', '<meta name="description" content="Entradas desde 39 €">', 'Accesibilidad y SEO'],
+  ['<meta property="og:…">', 'Open Graph: título, descripción e imagen de la tarjeta al compartir el enlace en redes.', '<meta property="og:image" content="https://web.es/og.jpg">', 'Accesibilidad y SEO'],
+  ['<link rel="icon">', 'Favicon: el icono de la pestaña.', '<link rel="icon" href="/favicon.svg">', 'Accesibilidad y SEO'],
+  ['<link rel="preconnect">', 'Adelanta la conexión con un dominio externo (fuentes, APIs) para cargar antes.', '<link rel="preconnect" href="https://fonts.googleapis.com">', 'Accesibilidad y SEO']
+];
+
+(function () {
+  const h = TOPICS.find((t) => t.slug === 'html');
+  h.cheats = HTML_CHEATS;
+  h.quiz.push({ t: '¿Qué pasa con un campo de formulario que no tiene atributo name?', o: ['Se envía vacío', 'No se envía', 'Da error', 'Se envía con su id'], ok: 1, why: 'name es la clave con la que llega el dato al servidor; sin él, el campo se ignora.' }, { t: '¿Qué diferencia hay entre disabled y readonly?', o: ['Ninguna', 'readonly se envía y disabled no', 'disabled se envía y readonly no', 'readonly solo vale para checkbox'], ok: 1, why: 'Ambos impiden editar, pero solo el campo readonly se envía con el formulario.' }, { t: '¿Qué etiqueta usarías para la tarjeta de un artista que tiene sentido por sí sola?', o: ['<section>', '<article>', '<aside>', '<div>'], ok: 1, why: 'article es contenido autónomo que podría publicarse por separado.' }, { t: '¿Qué atributo hace que una celda ocupe dos columnas?', o: ['rowspan="2"', 'colspan="2"', 'span="2"', 'cols="2"'], ok: 1, why: 'colspan une columnas; rowspan une filas.' }, { t: '¿Qué entidad muestra el signo < como texto?', o: ['&lt;', '&gt;', '&amp;', '&nbsp;'], ok: 0, why: '&lt; es «less than», el signo menor que.' }, { t: 'Dos inputs radio pertenecen al mismo grupo cuando tienen el mismo…', o: ['id', 'value', 'name', 'class'], ok: 2, why: 'Con el mismo name, solo se puede marcar uno de ellos.' }, { t: '¿Qué hace el atributo defer en un script?', o: ['No carga el script', 'Lo ejecuta cuando el HTML está listo, sin bloquear', 'Lo ejecuta dos veces', 'Lo carga en otra pestaña'], ok: 1, why: 'defer descarga en paralelo y ejecuta al terminar de leer el HTML, respetando el orden.' });
+  h.desc = 'La estructura de toda web: etiquetas, texto, enlaces, multimedia, tablas, formularios, semántica, accesibilidad y SEO.';
+})();
