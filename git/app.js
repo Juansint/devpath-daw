@@ -36,9 +36,7 @@ let level = 'Todos';
 function renderChapters() {
   $('#levels').innerHTML = ['Todos', 'Básico', 'Intermedio', 'Avanzado'].map((l) => `<button type="button" aria-pressed="${l === level}" data-l="${l}">${l}</button>`).join('');
   $('#chapters').innerHTML = chapters.map((c, i) => ({ c, i })).filter(({ c }) => level === 'Todos' || c[2] === level).map(({ c, i }) => {
-    const href = c[3] ? 'https://git-scm.com/book/es/v2' : '/git/leccion';
-    const ext = c[3] ? ' target="_blank" rel="noopener"' : '';
-    return `<a class="card chap" href="${href}"${ext}><span class="tile" style="background:${tiles[i % 4][0]};color:${tiles[i % 4][1]}">${String(i + 1).padStart(2, '0')}</span><h3>${c[0]}</h3><p>${c[1]}</p><span class="foot"><span>${c[2]}</span><b>${c[3] ? 'Leer en Pro Git ↗' : 'Lección interactiva →'}</b></span></a>`;
+    return `<a class="card chap" href="/git/capitulo/${i + 1}"><span class="tile" style="background:${tiles[i % 4][0]};color:${tiles[i % 4][1]}">${String(i + 1).padStart(2, '0')}</span><h3>${c[0]}</h3><p>${c[1]}</p><span class="foot"><span>${c[2]}</span><b>Lección interactiva →</b></span></a>`;
   }).join('');
 }
 $('#levels').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { level = b.dataset.l; renderChapters(); } });

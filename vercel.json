@@ -2,7 +2,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/tema/:slug", "destination": "/tema" }
+    { "source": "/tema/:slug", "destination": "/tema" },
+    { "source": "/git/capitulo/:n", "destination": "/git/leccion" }
   ],
   "redirects": [
     { "source": "/gitpath", "destination": "/git", "permanent": false }
