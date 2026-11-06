@@ -17,13 +17,16 @@ $('#ctitle').textContent = 'Chuleta de ' + t.name;
 /* Lecciones: los 4 pasos de la ruta son capítulos con secciones */
 function renderSteps(L) {
   let total = 0, hechos = 0;
-  $('#steps').innerHTML = t.steps.map((s, i) => {
-    const n = L ? L.capitulos[i].secciones.length : 0;
+  const caps = L ? L.capitulos : t.steps.map((s) => ({ t: s[0], d: s[1], secciones: [] }));
+  $('#stitle').textContent = 'Lecciones · ' + caps.length + ' capítulos';
+  $('#steps').innerHTML = caps.map((c, i) => {
+    const n = c.secciones.length;
     let d = [];
     try { d = JSON.parse(localStorage.getItem('devpath-' + t.slug + '-c' + (i + 1)) || '[]'); } catch (e) { d = []; }
     total += n; hechos += Math.min(d.length, n);
     const ok = n && d.length >= n;
-    return `<a class="paso${ok ? ' ok' : ''}" href="/tema/${t.slug}/${i + 1}"><span class="n">${ok ? '✓' : i + 1}</span><span><b>${esc(s[0])}</b><small>${esc(s[1])}</small><em>${n ? Math.min(d.length, n) + ' de ' + n + ' secciones' : 'Lección'} · Abrir →</em></span></a>`;
+    const desc = c.d || (t.steps[i] ? t.steps[i][1] : '');
+    return `<a class="paso${ok ? ' ok' : ''}" href="/tema/${t.slug}/${i + 1}"><span class="n">${ok ? '✓' : i + 1}</span><span><b>${esc(c.t)}</b><small>${esc(desc)}</small><em>${n ? Math.min(d.length, n) + ' de ' + n + ' secciones' : 'Lección'} · Abrir →</em></span></a>`;
   }).join('');
   $('#scount').textContent = total ? hechos + ' de ' + total + ' secciones' : '';
   $('#sbar').style.width = total ? Math.round(hechos / total * 100) + '%' : '0%';
@@ -53,12 +56,16 @@ const practices = {
     draw();
   },
   sql() {
+    const C = { DAW1: 'Elena', DAW2: 'Raúl' };
     const A = [[1, 'Ana', 'DAW1', 8.5], [2, 'Luis', 'DAW1', 6], [3, 'Marta', 'DAW2', 9.2], [4, 'Javi', 'DAW2', 4.8], [5, 'Sara', 'DAW1', 7.1]];
     const Q = [
       { q: 'SELECT * FROM alumnos;', cols: ['id', 'nombre', 'curso', 'nota'], rows: A, note: 'El asterisco trae todas las columnas.' },
       { q: 'SELECT nombre, nota\nFROM alumnos\nWHERE nota >= 7;', cols: ['nombre', 'nota'], rows: A.filter((a) => a[3] >= 7).map((a) => [a[1], a[3]]), note: 'WHERE deja solo las filas que cumplen la condición.' },
       { q: 'SELECT nombre, nota\nFROM alumnos\nORDER BY nota DESC\nLIMIT 3;', cols: ['nombre', 'nota'], rows: A.slice().sort((a, b) => b[3] - a[3]).slice(0, 3).map((a) => [a[1], a[3]]), note: 'ORDER BY DESC ordena de mayor a menor y LIMIT corta el resultado.' },
-      { q: 'SELECT curso, COUNT(*) AS total,\n       ROUND(AVG(nota), 1) AS media\nFROM alumnos\nGROUP BY curso;', cols: ['curso', 'total', 'media'], rows: ['DAW1', 'DAW2'].map((c) => { const g = A.filter((a) => a[2] === c); return [c, g.length, Math.round(g.reduce((x, a) => x + a[3], 0) / g.length * 10) / 10]; }), note: 'GROUP BY junta las filas de cada curso y calcula agregados.' }
+      { q: 'SELECT curso, COUNT(*) AS total,\n       ROUND(AVG(nota), 1) AS media\nFROM alumnos\nGROUP BY curso;', cols: ['curso', 'total', 'media'], rows: ['DAW1', 'DAW2'].map((c) => { const g = A.filter((a) => a[2] === c); return [c, g.length, Math.round(g.reduce((x, a) => x + a[3], 0) / g.length * 10) / 10]; }), note: 'GROUP BY junta las filas de cada curso y calcula agregados.' },
+      { q: 'SELECT a.nombre, c.tutor\nFROM alumnos a\nJOIN cursos c ON c.codigo = a.curso\nWHERE a.nota >= 7;', cols: ['nombre', 'tutor'], rows: A.filter((a) => a[3] >= 7).map((a) => [a[1], C[a[2]]]), note: 'JOIN une cada alumno con su curso (tabla cursos: DAW1 → Elena, DAW2 → Raúl).' },
+      { q: 'SELECT nombre, nota\nFROM alumnos\nWHERE nota > (SELECT AVG(nota) FROM alumnos);', cols: ['nombre', 'nota'], rows: A.filter((a) => a[3] > A.reduce((s, x) => s + x[3], 0) / A.length).map((a) => [a[1], a[3]]), note: 'La subconsulta calcula la media (7.12) y el WHERE compara cada nota con ella.' },
+      { q: "ALTER TABLE alumnos\n  ADD COLUMN email VARCHAR(150);\nSELECT id, nombre, email FROM alumnos;", cols: ['id', 'nombre', 'email'], rows: A.map((a) => [a[0], a[1], 'NULL']), note: 'ALTER TABLE añade la columna a la tabla existente; las filas que ya había quedan con NULL.' }
     ];
     let sel = 0;
     P.innerHTML = `<div class="prac"><div class="card ctrl" style="gap:10px"><span style="font-size:13px;color:var(--muted)">Elige una consulta sobre la tabla <code class="mono" style="color:#3730A3">alumnos</code>:</span><div id="qlist" style="display:flex;flex-direction:column;gap:10px"></div></div><div class="view"><pre class="darkpre mono" id="sq" style="font-size:14px"></pre><div class="tbl"><table id="st"></table></div><span id="sn" style="font-size:13px;color:var(--muted)"></span></div></div>`;
