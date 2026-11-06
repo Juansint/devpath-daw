@@ -13,7 +13,7 @@ function renderTopics() {
       <span class="head"><span class="badge48" style="background:${t.bg};color:${t.fg}">${esc(t.badge)}</span>
       <span class="pill" style="background:${t.bg};color:${t.fg}">${t.area}</span></span>
       <h3>${t.name}</h3><p>${t.desc}</p>
-      <span class="tags"><span>${t.practiceTag}</span><span>Chuleta</span><span>Retos</span></span>
+      <span class="tags"><span>Lecciones</span><span>${t.practiceTag}</span><span>Chuleta</span><span>Retos</span></span>
       <span class="foot"><span>Recurso: ${t.site}</span><b>Abrir →</b></span>
     </a>`).join('');
   $('#notopics').hidden = list.length > 0;

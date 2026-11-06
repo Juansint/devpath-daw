@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección — DevPath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="top"><div class="wrap" style="max-width:1240px">
+<a href="/" id="back" class="btn" style="color:#374151;padding-left:0">← Volver</a>
+<div class="row" style="flex:0 1 360px;flex-wrap:nowrap"><span id="count" style="font-size:13px;color:var(--muted);white-space:nowrap"></span><div class="prog" style="flex:1"><i id="bar"></i></div></div>
+</div></header>
+<div class="wrap lesson">
+<nav class="card toc" aria-label="Capítulos y secciones">
+<label for="cap" style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;padding:0 8px">Capítulo</label>
+<select id="cap" style="font:600 14px Inter,sans-serif;padding:10px 12px;border-radius:10px;border:1px solid #D1D5DB;background:#fff;min-height:44px;margin:4px 0 12px;width:100%"></select>
+<h4 id="captitle"></h4>
+<div id="toc"></div>
+</nav>
+<main class="card content" id="content"></main>
+</div>
+<footer><div class="wrap"><span>DevPath · Apuntes interactivos de la clase de DAW</span><a href="/" id="foot">Volver al tema</a></div></footer>
+<script src="/data.js"></script>
+<script src="/leccion.js"></script>
+</body>
+</html>

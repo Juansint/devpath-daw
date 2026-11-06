@@ -14,22 +14,25 @@ $('#ext').href = t.url; $('#ext').textContent = 'Ampliar en ' + t.site + ' ↗';
 $('#ptitle').textContent = t.practiceTitle;
 $('#ctitle').textContent = 'Chuleta de ' + t.name;
 
-/* Ruta (se guarda en el navegador) */
-const KEY = 'devpath-pasos-' + t.slug;
-let done = [];
-try { done = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { done = []; }
-function renderSteps() {
-  $('#steps').innerHTML = t.steps.map((s, i) => `<button type="button" data-i="${i}" aria-pressed="${done.includes(i)}"><span class="n">${done.includes(i) ? '✓' : i + 1}</span><span><b>${esc(s[0])}</b><small>${esc(s[1])}</small></span></button>`).join('');
-  $('#scount').textContent = done.length + ' de ' + t.steps.length;
-  $('#sbar').style.width = Math.round(done.length / t.steps.length * 100) + '%';
+/* Lecciones: los 4 pasos de la ruta son capítulos con secciones */
+function renderSteps(L) {
+  let total = 0, hechos = 0;
+  $('#steps').innerHTML = t.steps.map((s, i) => {
+    const n = L ? L.capitulos[i].secciones.length : 0;
+    let d = [];
+    try { d = JSON.parse(localStorage.getItem('devpath-' + t.slug + '-c' + (i + 1)) || '[]'); } catch (e) { d = []; }
+    total += n; hechos += Math.min(d.length, n);
+    const ok = n && d.length >= n;
+    return `<a class="paso${ok ? ' ok' : ''}" href="/tema/${t.slug}/${i + 1}"><span class="n">${ok ? '✓' : i + 1}</span><span><b>${esc(s[0])}</b><small>${esc(s[1])}</small><em>${n ? Math.min(d.length, n) + ' de ' + n + ' secciones' : 'Lección'} · Abrir →</em></span></a>`;
+  }).join('');
+  $('#scount').textContent = total ? hechos + ' de ' + total + ' secciones' : '';
+  $('#sbar').style.width = total ? Math.round(hechos / total * 100) + '%' : '0%';
 }
-$('#steps').addEventListener('click', (e) => {
-  const b = e.target.closest('button'); if (!b) return; const i = +b.dataset.i;
-  done = done.includes(i) ? done.filter((x) => x !== i) : done.concat(i);
-  try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (err) {}
-  renderSteps();
-});
-renderSteps();
+renderSteps(null);
+const ls = document.createElement('script');
+ls.src = '/lecciones/' + t.slug + '.js';
+ls.onload = () => renderSteps(LECCIONES[t.slug]);
+document.head.appendChild(ls);
 
 /* Prácticas */
 const P = $('#practice');

@@ -7,6 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
+<style>
+.steps a.paso{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:14px;color:var(--ink);background:#fff;border:1px solid var(--line);text-decoration:none;transition:transform .15s,box-shadow .15s}
+.steps a.paso:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(79,70,229,.12)}
+.steps a.paso.ok{background:#ECFDF5;border:2px solid var(--green)}
+.steps a.paso.ok .n{background:var(--green);color:#fff}
+.steps a.paso em{display:block;font-style:normal;font-size:12px;font-weight:600;color:#4338CA;margin-top:8px}
+</style>
 </head>
 <body>
 <header class="top"><div class="wrap" style="padding-top:8px;padding-bottom:8px">
@@ -20,7 +27,7 @@
 <div class="id"><span class="badge72" id="badge"></span>
 <div><span class="pill" id="area"></span><h1 id="name"></h1><p id="desc"></p></div></div>
 <div class="side">
-<div class="row" style="justify-content:space-between;font-size:13px;color:var(--muted)"><span>Ruta del tema</span><span id="scount"></span></div>
+<div class="row" style="justify-content:space-between;font-size:13px;color:var(--muted)"><span>Lecciones</span><span id="scount"></span></div>
 <div class="prog"><i id="sbar" style="background:var(--green)"></i></div>
 <a class="btn primary" id="ext" target="_blank" rel="noopener" style="justify-content:center"></a>
 </div>
@@ -28,7 +35,7 @@
 </section>
 
 <section class="wrap" style="padding-bottom:40px">
-<h2 class="sub">Ruta en 4 pasos</h2>
+<h2 class="sub">Lecciones · 4 capítulos</h2>
 <div class="steps" id="steps"></div>
 </section>
 
