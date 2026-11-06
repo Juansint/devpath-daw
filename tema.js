@@ -82,7 +82,10 @@ const practices = {
       'Título': '<h1>Hola, DAW</h1>\n<p>Este es mi primer párrafo.</p>',
       'Lista': '<ul>\n  <li>HTML</li>\n  <li>CSS</li>\n  <li>JavaScript</li>\n</ul>',
       'Formulario': '<form>\n  <label for="email">Correo</label>\n  <input id="email" type="email" placeholder="tu@correo.com">\n  <button type="submit">Enviar</button>\n</form>',
-      'Enlace e imagen': '<a href="https://developer.mozilla.org/es/">Documentación MDN</a>\n<br>\n<img src="https://placehold.co/240x120?text=Imagen" alt="Imagen de ejemplo">'
+      'Enlace e imagen': '<a href="https://developer.mozilla.org/es/">Documentación MDN</a>\n<br>\n<img src="https://placehold.co/240x120?text=Imagen" alt="Imagen de ejemplo">',
+      'Tabla': '<table border="1" cellpadding="6">\n  <caption>Horarios</caption>\n  <tr><th scope="col">Hora</th><th scope="col">Artista</th></tr>\n  <tr><td>18:00</td><td>Banda A</td></tr>\n  <tr><td colspan="2">Descanso</td></tr>\n</table>',
+      'Desplegable': '<details open>\n  <summary>¿Hay parking?</summary>\n  <p>Sí, junto a la puerta norte.</p>\n</details>\n<details>\n  <summary>¿Puedo salir y volver?</summary>\n  <p>Sí, con la pulsera.</p>\n</details>',
+      'Página semántica': '<header>\n  <h1>Festival DAW</h1>\n  <nav><a href="#">Cartel</a> · <a href="#">Entradas</a></nav>\n</header>\n<main>\n  <section>\n    <h2>Cartel</h2>\n    <article><h3>Banda A</h3><p>Viernes, 21:00</p></article>\n  </section>\n</main>\n<footer><small>© 2026</small></footer>'
     };
     P.innerHTML = `<div class="prac"><div class="card ctrl" style="gap:10px"><span style="font-size:13px;color:var(--muted)">Elige un ejemplo y edítalo:</span><div class="pills" id="hp">${Object.keys(S).map((k) => `<button type="button" data-k="${k}">${k}</button>`).join('')}</div>
       <label for="hcode" style="font-size:13px;font-weight:600">Tu código HTML</label><textarea id="hcode" class="mono" spellcheck="false" style="min-height:200px;background:var(--dark);color:#E5E7F5;border:0;border-radius:14px;padding:16px;font-size:13px;line-height:1.7;resize:vertical"></textarea></div>
@@ -109,8 +112,13 @@ practices[t.practice]();
 /* Chuleta */
 function renderCheats() {
   const q = $('#buscar-chuleta').value.trim().toLowerCase();
-  const list = t.cheats.filter((c) => !q || (c[0] + ' ' + c[1]).toLowerCase().includes(q));
-  $('#cheats').innerHTML = list.length ? list.map((c) => `<div class="card cmd" style="padding:14px 16px"><code title="Copiar">${esc(c[0])}</code><p style="margin:0">${esc(c[1])}</p></div>`).join('') : '<p style="color:var(--muted)">Nada coincide. Prueba con otra palabra.</p>';
+  const list = t.cheats.filter((c) => !q || c.join(' ').toLowerCase().includes(q));
+  let grupo = null;
+  $('#cheats').innerHTML = list.length ? list.map((c) => {
+    const h = c[3] && c[3] !== grupo ? `<h3 class="cgroup">${esc(c[3])}</h3>` : '';
+    if (c[3]) grupo = c[3];
+    return h + `<div class="card cmd" style="padding:14px 16px"><code title="Copiar">${esc(c[0])}</code><p style="margin:0">${esc(c[1])}</p>${c[2] ? `<pre class="mono">${esc(c[2])}</pre>` : ''}</div>`;
+  }).join('') : '<p style="color:var(--muted)">Nada coincide. Prueba con otra palabra.</p>';
 }
 $('#buscar-chuleta').addEventListener('input', renderCheats);
 $('#cheats').addEventListener('click', (e) => {

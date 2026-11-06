@@ -38,9 +38,13 @@ function iniciar(L) {
       : `<a class="btn primary" href="${base}">Tema completado 🎉 Ir a la práctica</a>`;
     $('content').innerHTML = `
       <div class="row" style="gap:8px"><span class="pill" style="background:${topic.bg};color:${topic.fg}">${esc(topic.name)} · ${x.n}</span><span class="pill p-green">${x.m} de lectura</span></div>
-      <h1>${esc(x.t)}</h1><p>${esc(x.b)}</p>
+      <h1>${esc(x.t)}</h1>${[].concat(x.b).map((p) => `<p>${esc(p)}</p>`).join('')}
       <div class="keys"><b>Ideas clave</b><ul>${x.k.map((k) => `<li>${esc(k)}</li>`).join('')}</ul></div>
-      <div class="code"><div class="bar mono"><span>Ejemplo</span><span>${L.lang}</span></div><pre>${esc(x.c)}</pre></div>
+      ${x.a ? `<div class="attrs"><b>${esc(x.at || 'Atributos y propiedades')}</b><div class="tbl"><table><thead><tr><th>${esc(x.ah ? x.ah[0] : 'Atributo')}</th><th>${esc(x.ah ? x.ah[1] : 'Para qué sirve')}</th></tr></thead><tbody>${x.a.map((r) => `<tr><td><code class="mono">${esc(r[0])}</code></td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
+      ${L.lang === 'html' && x.v !== 0
+        ? `<div class="code live"><div class="bar mono"><span>Ejemplo editable: cambia el código y mira el resultado</span><button type="button" class="reset" id="reset">Restablecer</button></div><textarea id="ed" class="mono" spellcheck="false" aria-label="Código HTML del ejemplo">${esc(x.c)}</textarea><div class="out"><span>Resultado</span><iframe id="pv" title="Resultado del ejemplo" sandbox=""></iframe></div></div>`
+        : `<div class="code"><div class="bar mono"><span>Ejemplo</span><span>${L.lang}</span></div><pre>${esc(x.c)}</pre></div>`}
+      ${x.e ? `<div class="warn"><b>Error común:</b> ${esc(x.e)}</div>` : ''}
       <div class="tip"><b>En clase:</b> ${esc(x.tip)}</div>
       <div class="row" style="justify-content:space-between;border-top:1px solid #F0F0F5;padding-top:18px">
         <button class="btn ghost" id="prev" ${i === 0 ? 'disabled' : ''}>← Anterior</button>
@@ -49,12 +53,21 @@ function iniciar(L) {
           ${last ? next : '<button class="btn primary" id="next">Siguiente →</button>'}
         </div>
       </div>`;
+    const ed = $('ed');
+    if (ed) {
+      const fit = () => { ed.style.height = 'auto'; ed.style.height = Math.max(140, ed.scrollHeight + 4) + 'px'; };
+      const draw = () => { $('pv').srcdoc = '<style>body{font-family:Inter,Arial,sans-serif;padding:14px;margin:0;line-height:1.5}table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px 10px}img{max-width:100%}</style>' + ed.value; };
+      ed.addEventListener('input', () => { fit(); draw(); });
+      ed.addEventListener('keydown', (ev) => { if (ev.key === 'Tab' && !ev.shiftKey) { ev.preventDefault(); const a = ed.selectionStart; ed.setRangeText('  ', a, ed.selectionEnd, 'end'); draw(); } });
+      fit(); draw();
+    }
   }
   $('toc').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { i = +b.dataset.j; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); } });
   $('content').addEventListener('click', (e) => {
     const id = e.target.id;
     if (id === 'prev' && i > 0) i--;
     else if (id === 'next' && i < S.length - 1) { if (!done.includes(i)) { done.push(i); save(); } i++; window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else if (id === 'reset') { $('ed').value = S[i].c; $('ed').dispatchEvent(new Event('input')); return; }
     else if (id === 'tog') { done = done.includes(i) ? done.filter((y) => y !== i) : done.concat(i); save(); }
     else if (e.target.closest('a.btn') && last()) { if (!done.includes(i)) { done.push(i); save(); } return; }
     else return;
