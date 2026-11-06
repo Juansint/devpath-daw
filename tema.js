@@ -34,7 +34,12 @@ function renderSteps(L) {
 renderSteps(null);
 const ls = document.createElement('script');
 ls.src = '/lecciones/' + t.slug + '.js';
-ls.onload = () => renderSteps(LECCIONES[t.slug]);
+ls.onload = () => {
+  const L = LECCIONES[t.slug]; renderSteps(L);
+  /* Cada archivo de lecciones puede traer su chuleta explicada y más retos */
+  if (L.chuleta) { t.cheats = L.chuleta; renderCheats(); }
+  if (L.retos && !t.retosCargados) { t.quiz = t.quiz.concat(L.retos); t.retosCargados = true; renderQuiz(); }
+};
 document.head.appendChild(ls);
 
 /* Prácticas */

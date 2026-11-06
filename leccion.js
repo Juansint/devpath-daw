@@ -30,6 +30,7 @@ function iniciar(L) {
 
   function render() {
     const x = S[i], isDone = done.includes(i), last = i === S.length - 1;
+    const mode = x.v === 0 ? 'static' : (L.lang === 'html' || L.lang === 'css') ? 'live' : L.lang === 'js' ? 'run' : 'static';
     $('count').textContent = topic.name + ' · Cap. ' + (ci + 1) + ' · ' + done.length + '/' + S.length;
     $('bar').style.width = Math.round(done.length / S.length * 100) + '%';
     $('toc').innerHTML = S.map((y, j) => `<button type="button" data-j="${j}" aria-current="${j === i}" class="${done.includes(j) ? 'ok' : ''}"><span class="badge">${done.includes(j) ? '✓' : j + 1}</span><span>${y.n}&nbsp; ${esc(y.t)}</span></button>`).join('');
@@ -41,10 +42,14 @@ function iniciar(L) {
       <h1>${esc(x.t)}</h1>${[].concat(x.b).map((p) => `<p>${esc(p)}</p>`).join('')}
       <div class="keys"><b>Ideas clave</b><ul>${x.k.map((k) => `<li>${esc(k)}</li>`).join('')}</ul></div>
       ${x.a ? `<div class="attrs"><b>${esc(x.at || 'Atributos y propiedades')}</b><div class="tbl"><table><thead><tr><th>${esc(x.ah ? x.ah[0] : 'Atributo')}</th><th>${esc(x.ah ? x.ah[1] : 'Para qué sirve')}</th></tr></thead><tbody>${x.a.map((r) => `<tr><td><code class="mono">${esc(r[0])}</code></td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
-      ${L.lang === 'html' && x.v !== 0
-        ? `<div class="code live"><div class="bar mono"><span>Ejemplo editable: cambia el código y mira el resultado</span><button type="button" class="reset" id="reset">Restablecer</button></div><textarea id="ed" class="mono" spellcheck="false" aria-label="Código HTML del ejemplo">${esc(x.c)}</textarea><div class="out"><span>Resultado</span><iframe id="pv" title="Resultado del ejemplo" sandbox=""></iframe></div></div>`
+      ${mode === 'live'
+        ? `<div class="code live"><div class="bar mono"><span>Ejemplo editable: cambia el código y mira el resultado</span><button type="button" class="reset" id="reset">Restablecer</button></div><textarea id="ed" class="mono" spellcheck="false" aria-label="Código del ejemplo">${esc(x.c)}</textarea><div class="out"><span>Resultado</span><iframe id="pv" title="Resultado del ejemplo" sandbox=""></iframe></div></div>`
+        : mode === 'run'
+        ? `<div class="code live"><div class="bar mono"><span>Ejemplo editable: cámbialo y ejecútalo</span><span class="row" style="gap:6px"><button type="button" class="reset" id="reset">Restablecer</button><button type="button" class="reset runb" id="run">▶ Ejecutar</button></span></div><textarea id="ed" class="mono" spellcheck="false" aria-label="Código JavaScript del ejemplo">${esc(x.c)}</textarea><div class="out"><span>Consola</span><div id="con" class="con mono"><i>Pulsa «Ejecutar» para ver la salida.</i></div>${x.dom ? '<iframe id="pv" title="Página del ejemplo" sandbox="allow-scripts" style="height:160px"></iframe>' : '<iframe id="pv" title="Ejecución" sandbox="allow-scripts" hidden></iframe>'}</div></div>`
         : `<div class="code"><div class="bar mono"><span>Ejemplo</span><span>${L.lang}</span></div><pre>${esc(x.c)}</pre></div>`}
+      ${x.o ? `<details class="salida"><summary>¿Qué muestra al ejecutarse? Piénsalo y pulsa para comprobarlo</summary><pre class="mono">${esc(x.o)}</pre></details>` : ''}
       ${x.e ? `<div class="warn"><b>Error común:</b> ${esc(x.e)}</div>` : ''}
+      ${x.q ? `<div class="mini" id="mini"><b>Comprueba que lo has entendido</b><p>${esc(x.q.t)}</p><div class="mopts">${x.q.o.map((o, j) => `<button type="button" class="opt" data-q="${j}">${esc(o)}</button>`).join('')}</div><div id="mfb"></div></div>` : ''}
       <div class="tip"><b>En clase:</b> ${esc(x.tip)}</div>
       <div class="row" style="justify-content:space-between;border-top:1px solid #F0F0F5;padding-top:18px">
         <button class="btn ghost" id="prev" ${i === 0 ? 'disabled' : ''}>← Anterior</button>
@@ -54,7 +59,15 @@ function iniciar(L) {
         </div>
       </div>`;
     const ed = $('ed');
-    if (ed) {
+    if (ed && mode === 'run') {
+      const fit = () => { ed.style.height = 'auto'; ed.style.height = Math.max(140, ed.scrollHeight + 4) + 'px'; };
+      ed.addEventListener('input', fit);
+      ed.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Tab' && !ev.shiftKey) { ev.preventDefault(); ed.setRangeText('  ', ed.selectionStart, ed.selectionEnd, 'end'); }
+        if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) { ev.preventDefault(); ejecutar(); }
+      });
+      fit();
+    } else if (ed) {
       const fit = () => { ed.style.height = 'auto'; ed.style.height = Math.max(140, ed.scrollHeight + 4) + 'px'; };
       const draw = () => { $('pv').srcdoc = '<style>body{font-family:Inter,Arial,sans-serif;padding:14px;margin:0;line-height:1.5}table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px 10px}img{max-width:100%}</style>' + ed.value; };
       ed.addEventListener('input', () => { fit(); draw(); });
@@ -67,12 +80,35 @@ function iniciar(L) {
     const id = e.target.id;
     if (id === 'prev' && i > 0) i--;
     else if (id === 'next' && i < S.length - 1) { if (!done.includes(i)) { done.push(i); save(); } i++; window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    else if (id === 'reset') { $('ed').value = S[i].c; $('ed').dispatchEvent(new Event('input')); return; }
+    else if (id === 'reset') { $('ed').value = S[i].c; $('ed').dispatchEvent(new Event('input')); if ($('con')) $('con').innerHTML = '<i>Pulsa «Ejecutar» para ver la salida.</i>'; return; }
+    else if (id === 'run') { ejecutar(); return; }
+    else if (e.target.dataset.q !== undefined) {
+      const q = S[i].q, k = +e.target.dataset.q;
+      $('mini').querySelectorAll('.opt').forEach((b, j) => { b.disabled = true; if (j === q.ok) b.classList.add('ok'); else if (j === k) b.classList.add('bad'); });
+      $('mfb').innerHTML = `<p class="mfb">${k === q.ok ? '¡Correcto! ' : 'Casi. '}${esc(q.why)}</p>`;
+      return;
+    }
     else if (id === 'tog') { done = done.includes(i) ? done.filter((y) => y !== i) : done.concat(i); save(); }
     else if (e.target.closest('a.btn') && last()) { if (!done.includes(i)) { done.push(i); save(); } return; }
     else return;
     render();
   });
   const last = () => i === S.length - 1;
+  /* Ejecutar JavaScript en un iframe aislado y mostrar la consola */
+  let runId = 0;
+  function ejecutar() {
+    const con = $('con'), code = $('ed').value.replace(/<\/script/gi, '<\\/script');
+    runId = Math.random().toString(36).slice(2);
+    con.innerHTML = '';
+    const hook = `<script>const _id='${runId}';const fmt=(v)=>{if(typeof v==='string')return v;if(v instanceof Error)return v.name+': '+v.message;try{return JSON.stringify(v,(k,x)=>x instanceof Map?Object.fromEntries(x):x instanceof Set?[...x]:x)}catch(e){return String(v)}};const send=(t,a)=>parent.postMessage({_id,t,m:a.map(fmt).join(' ')},'*');console.log=console.info=(...a)=>send('log',a);console.warn=(...a)=>send('warn',a);console.error=(...a)=>send('err',a);console.table=(d)=>send('log',[d]);window.onerror=(m)=>{send('err',[String(m).replace('Uncaught ','')]);return true};window.onunhandledrejection=(e)=>send('err',[fmt(e.reason)]);<\/script>`;
+    $('pv').srcdoc = '<style>body{font-family:Inter,Arial,sans-serif;padding:10px;margin:0}</style>' + hook + '<body><div id="app"></div><script>' + code + '<\/script></body>';
+    setTimeout(() => { if (!con.children.length && runId) con.innerHTML = '<i>(sin salida en consola)</i>'; }, 1500);
+  }
+  window.addEventListener('message', (ev) => {
+    const d = ev.data; if (!d || d._id !== runId) return;
+    const con = $('con'); if (!con) return;
+    if (con.querySelector('i')) con.innerHTML = '';
+    const line = document.createElement('div'); line.className = 'ln ' + d.t; line.textContent = d.m; con.appendChild(line);
+  });
   render();
 }

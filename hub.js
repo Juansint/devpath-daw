@@ -6,7 +6,7 @@ function renderTopics() {
   const q = $('#buscar-tema').value.trim().toLowerCase();
   const list = TOPICS.filter((t) => (area === 'Todas' || t.area === area) &&
     (!q || (t.name + ' ' + t.keys + ' ' + t.desc).toLowerCase().includes(q)));
-  $('#areas').innerHTML = ['Todas', 'Frontend', 'Backend', 'Datos', 'Herramientas']
+  $('#areas').innerHTML = ['Todas', 'Frontend', 'Backend', 'Datos', 'Sistemas', 'Herramientas']
     .map((a) => `<button type="button" aria-pressed="${a === area}" data-a="${a}">${a}</button>`).join('');
   $('#topics').innerHTML = list.map((t) => `
     <a class="card topic" href="${t.href || '/tema/' + t.slug}">
@@ -23,7 +23,7 @@ $('#buscar-tema').addEventListener('input', renderTopics);
 renderTopics();
 
 /* Ruta con progreso guardado */
-const ORDER = ['HTML', 'CSS', 'JavaScript', 'Git', 'SQL', 'Java', 'PHP', 'React'];
+const ORDER = ['HTML', 'CSS', 'JavaScript', 'Git', 'Linux', 'XML y JSON', 'SQL', 'Java', 'Entornos', 'PHP', 'Node.js', 'React', 'Despliegue'];
 let done = [];
 try { done = JSON.parse(localStorage.getItem('devpath-ruta') || '[]'); } catch (e) { done = []; }
 function renderPath() {
