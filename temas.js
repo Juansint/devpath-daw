@@ -56,3 +56,20 @@
   TOPICS.splice(gi, 0, ...nuevos);
   RESOURCES.push(['Linux', 'ubuntu.com/tutorials', 'https://ubuntu.com/tutorials/command-line-for-beginners'], ['Docker', 'docs.docker.com', 'https://docs.docker.com/get-started/'], ['Node.js', 'nodejs.org/learn', 'https://nodejs.org/es/learn']);
 })();
+
+/* Bases de datos: apuntes de clase (E/R, modelo relacional, DDL, DML, integridad y consultas). Va justo después de SQL. */
+(function () {
+  const bbdd = {
+    slug: 'bbdd', name: 'Bases de datos', badge: 'BD', area: 'Datos', bg: '#E0E7FF', fg: '#3730A3',
+    site: 'PostgreSQL', url: 'https://www.postgresql.org/docs/', practice: 'code', practiceTag: 'Predice el resultado', practiceTitle: '¿Se inserta o da error?', file: 'alumnos.sql',
+    keys: 'bases de datos bbdd entidad relacion e/r modelo relacional clave primaria foranea postgresql pgadmin ddl dml check unique references integridad referencial cascade select join group by apuntes clase',
+    desc: 'Apuntes de clase: diagrama E/R, modelo relacional, DDL, DML con restricciones, integridad referencial y consultas en PostgreSQL.',
+    code: "CREATE TABLE alumnos (\n  id_alumno INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  nombre    VARCHAR(20) NOT NULL UNIQUE,\n  nota      DECIMAL(3,1) CHECK (nota >= 0 AND nota <= 10)\n);\n\nINSERT INTO alumnos (nombre, nota) VALUES ('Nuria', 7.8);\nINSERT INTO alumnos (nombre, nota) VALUES ('Nuria', 2.9);",
+    output: 'INSERT 0 1\nERROR: duplicate key value violates unique constraint "alumnos_nombre_key"\nDETAIL: Key (nombre)=(Nuria) already exists.',
+    why: 'La primera fila entra sin problema. La segunda cumple el CHECK (2.9 está entre 0 y 10), pero repite el nombre y la columna es UNIQUE, así que PostgreSQL la rechaza.',
+    steps: [['Diagrama E/R', 'Entidades y relaciones.'], ['Modelo relacional', 'Tablas, PK y FK.'], ['DDL y DML', 'Crear tablas y datos.'], ['Consultas', 'SELECT y JOIN.']],
+    cheats: [], quiz: []
+  };
+  const si = TOPICS.findIndex((t) => t.slug === 'sql');
+  TOPICS.splice(si + 1, 0, bbdd);
+})();
